@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1254">
+    <META HTTP-EQUIV="Content-language" CONTENT="tr">
+    <title></title>
+</head>
+<body>
+<h2>Define Inputs</h2>
+
+<button type="button" id="new_definition">New Definition</button>
+<button type="button" id="apply">Apply</button>
+<button type="button" id="random">Random</button>
+<table id="item_list">
+    <thead>
+    <tr>
+        <th>Selector</th>
+        <th>Selector Value</th>
+        <th>Type</th>
+        <th>Static Value</th>
+        <th>#</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <select name="input_selector">
+                <option value="" selected></option>
+                <option value="class">class</option>
+                <option value="attribute">attribute</option>
+                <option value="name">name</option>
+                <option value="id">id</option>
+            </select>
+        </td>
+        <td><input type="text" name="input_selector_value"></td>
+        <td>
+            <select name="input_type">
+                <option value="" selected></option>
+                <option value="text">text</option>
+                <option value="tel">tel</option>
+                <option value="email">email</option>
+                <option value="date">date</option>
+                <option value="number">number</option>
+                <option value="email">email</option>
+            </select>
+        </td>
+        <td><input type="text" name="static_value"></td>
+        <td>
+            <button type="button" class="save">Save</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<script src="jquery-3.6.3.min.js"></script>
+<script src="popup.js"></script>
+<template id="new_row_template">
+    <tr>
+        <td>
+            <select name="input_selector">
+                <option value="" selected></option>
+                <option value="class">class</option>
+                <option value="attribute">attribute</option>
+                <option value="name">name</option>
+                <option value="id">id</option>
+            </select>
+        </td>
+        <td><input type="text" name="input_selector_value"></td>
+        <td>
+            <select name="input_type">
+                <option value="" selected></option>
+                <option value="text">text</option>
+                <option value="tel">tel</option>
+                <option value="email">email</option>
+                <option value="date">date</option>
+                <option value="number">number</option>
+                <option value="email">email</option>
+            </select>
+        </td>
+        <td><input type="text" name="static_value"></td>
+        <td>
+            <button type="button" class="save">Save</button>
+        </td>
+    </tr>
+</template>
+</body>
+</html>
