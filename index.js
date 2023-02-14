@@ -13,7 +13,7 @@ function fillTheBlanksByType() {
 function generateValueByType(type) {
     let $selectedInput = $('form input[type="' + type + '"]');
 
-    let inputValue = faker.internet.userName();
+    let inputValue = faker.name.fullName();
     if (type === 'email') {
         inputValue = faker.internet.email();
     } else if (type === 'date') {
@@ -52,8 +52,8 @@ chrome.runtime.onMessage.addListener( // this is the message listener
 
                     if (rule.staticValue) {
                         inputValue = rule.staticValue
-                    } else {
-                        inputValue = faker.internet.userName()
+                    } else if (rule.dynamicValue) {
+                        inputValue = getPropByString(faker,rule.dynamicValue)
                     }
 
                     $inputElement.val(inputValue)
@@ -67,7 +67,7 @@ chrome.runtime.onMessage.addListener( // this is the message listener
 
         sendResponse({status: 'ok'});
     }
-);
+)
 
 function tcknGenerator() {
     var a = "" + Math.floor(900000001 * Math.random() + 1e8),
@@ -79,4 +79,23 @@ function tcknGenerator() {
         e = (7 * c - d) % 10;
 
     return a + ("" + e) + ("" + (d + c + e) % 10)
+}
+
+function getPropByString(obj, propString) {
+    if (!propString)
+        return obj;
+
+    var prop, props = propString.split('.');
+
+    for (var i = 0, iLen = props.length - 1; i < iLen; i++) {
+        prop = props[i];
+
+        var candidate = obj[prop];
+        if (candidate !== undefined) {
+            obj = candidate;
+        } else {
+            break;
+        }
+    }
+    return obj[props[i]];
 }

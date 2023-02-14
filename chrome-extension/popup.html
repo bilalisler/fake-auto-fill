@@ -164,22 +164,26 @@
         <td>
             <select name="dynamic_value" class="form-control w100">
                 <option value="" selected>-</option>
-                <option value="address">address</option>
-                <option value="paragraph">paragraph</option>
-                <option value="sentence">sentence</option>
-                <option value="word">word</option>
-                <option value="animal">animal</option>
-                <option value="color">color</option>
-                <option value="datetime">datetime</option>
-                <option value="ipv4">ipv4</option>
-                <option value="id">id</option>
-                <option value="id">id</option>
-                <option value="id">id</option>
+<!--                <option value="address">address</option>-->
+                <option value="lorem.paragraph()">paragraph</option>
+                <option value="lorem.sentence()">sentence</option>
+                <option value="random.word()">word</option>
+                <option value="animal.cat()">animal</option>
+                <option value="internet.color()">color</option>
+                <option value="internet.userName()">username</option>
+                <option value="datatype.datetime()">datetime</option>
+                <option value="internet.ipv4()">ipv4</option>
+                <option value="name.fullName()">full name</option>
+                <option value="name.firstName()">first name</option>
+                <option value="name.lastName()">last name</option>
             </select>
         </td>
         <td>
             <button type="button" class="btn btn-sm btn-outline-primary save">
                 <i class="fa fa-save"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-danger remove">
+                <i class="fa fa-bucket"></i>
             </button>
         </td>
     </tr>

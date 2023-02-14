@@ -1,9 +1,10 @@
 'use strict';
 
-function load() {
+function loadRules() {
+    clearTableBody()
     chrome.storage.local.get(['rules'], function (result) {
-        if (typeof result.rules !== 'undefined') {
-            $('#item_list tfoot tr.message').hide()
+        if (typeof result.rules !== 'undefined' && Object.keys(result.rules).length > 0) {
+            hideTfootMessage()
             for (const [index, rule] of Object.entries(result.rules)) {
                 let $newRow = $($('#new_row_template').clone(true).html())
                 for (const [key, val] of Object.entries(rule)) {
@@ -22,12 +23,20 @@ function load() {
     })
 }
 
-load()
+loadRules()
 
+function clearTableBody() {
+    $('#item_list tbody').html('')
+    $('#item_list tfoot tr.message').show()
+}
+
+function hideTfootMessage() {
+    $('#item_list tfoot tr.message').hide()
+}
 
 $('#new_rule').on('click', function (e) {
     e.preventDefault()
-    $('#item_list tfoot tr.message').hide()
+    hideTfootMessage()
     let newRow = $('#new_row_template').html()
     $('#item_list tbody').append(newRow)
 })
@@ -35,17 +44,35 @@ $('#new_rule').on('click', function (e) {
 $('#clear_rules').on('click', function (e) {
     e.preventDefault()
     clearStorage()
-    $('#item_list tbody').html('')
-    $('#item_list tfoot tr.message').show()
+    clearTableBody()
 })
 
+$(document).on('click', '.remove', async function () {
+    let trElement = $(this).parent('td').parent('tr')
+    let trElementIndex = $(trElement).index();
+
+    let rules = []
+    getStorage('rules').then((result) => {
+        if (typeof result.rules !== 'undefined') {
+            for (const [ruleIndex, rule] of Object.entries(result.rules)) {
+                if (parseInt(ruleIndex) !== parseInt(trElementIndex)) {
+                    rules.push(rule)
+                }
+            }
+        }
+
+        storage('rules', rules)
+        loadRules()
+    })
+})
 
 $(document).on('click', '.save', async function () {
     let trElement = $(this).parent('td').parent('tr')
     let trElementIndex = $(trElement).index();
 
-    let rules = {}
-    rules[trElementIndex] = {}
+    let rules = {
+        [trElementIndex]: {}
+    }
     trElement.find('td input, td select').each((index, element) => {
         let name = $(element).attr('name')
         let elementValue = $(element).val()
@@ -74,13 +101,14 @@ $(document).on('click', '#apply_rules', async function (e) {
         let inputSelectorValue = $(trElement).find('input[name="input_selector_value"]').val()
         let inputType = $(trElement).find('select[name="input_type"] option:selected').val()
         let staticValue = $(trElement).find('input[name="static_value"]').val()
+        let dynamicValue = $(trElement).find('input[name="dynamic_value"]').val()
 
         definitionList.push({
-            index: trIndex,
             inputSelector,
             inputSelectorValue,
             inputType,
-            staticValue
+            staticValue,
+            dynamicValue
         })
     })
 
