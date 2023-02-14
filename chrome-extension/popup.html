@@ -4,59 +4,62 @@
     <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1254">
     <META HTTP-EQUIV="Content-language" CONTENT="tr">
     <title></title>
+    <link rel="stylesheet" href="bootstrap.min.css">
 </head>
 <body>
-<h2>Define Inputs</h2>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <img src="./images/fill_blanks_32.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        Fill Blanks
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-<button type="button" id="new_definition">New Definition</button>
-<button type="button" id="apply">Apply</button>
-<button type="button" id="random">Random</button>
-<table id="item_list">
-    <thead>
-    <tr>
-        <th>Selector</th>
-        <th>Selector Value</th>
-        <th>Type</th>
-        <th>Static Value</th>
-        <th>#</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>
-            <select name="input_selector">
-                <option value="" selected></option>
-                <option value="class">class</option>
-                <option value="attribute">attribute</option>
-                <option value="name">name</option>
-                <option value="id">id</option>
-            </select>
-        </td>
-        <td><input type="text" name="input_selector_value"></td>
-        <td>
-            <select name="input_type">
-                <option value="" selected></option>
-                <option value="text">text</option>
-                <option value="tel">tel</option>
-                <option value="email">email</option>
-                <option value="date">date</option>
-                <option value="number">number</option>
-                <option value="email">email</option>
-            </select>
-        </td>
-        <td><input type="text" name="static_value"></td>
-        <td>
-            <button type="button" class="save">Save</button>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#" id="new_definition">New Rule</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" id="apply">Apply</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" id="random">Random</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" id="clear_all">Clear</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row"></div>
+    <div class="row" id="item_list"></div>
+</div>
+<!--<table id="item_list" class="table table-hover">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th>Selector</th>-->
+<!--        <th>Selector Value</th>-->
+<!--        <th>Type</th>-->
+<!--        <th>Static Value</th>-->
+<!--        <th>Predefined Value</th>-->
+<!--        <th>#</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    </tbody>-->
+<!--</table>-->
 <script src="jquery-3.6.3.min.js"></script>
+<script src="bootstrap.min.js"></script>
 <script src="popup.js"></script>
 <template id="new_row_template">
     <tr>
         <td>
-            <select name="input_selector">
+            <select name="input_selector" class="form-control">
                 <option value="" selected></option>
                 <option value="class">class</option>
                 <option value="attribute">attribute</option>
@@ -64,9 +67,9 @@
                 <option value="id">id</option>
             </select>
         </td>
-        <td><input type="text" name="input_selector_value"></td>
+        <td><input type="text" name="input_selector_value" class="form-control"></td>
         <td>
-            <select name="input_type">
+            <select name="input_type" class="form-control">
                 <option value="" selected></option>
                 <option value="text">text</option>
                 <option value="tel">tel</option>
@@ -76,9 +79,25 @@
                 <option value="email">email</option>
             </select>
         </td>
-        <td><input type="text" name="static_value"></td>
+        <td><input type="text" name="static_value" class="form-control"></td>
         <td>
-            <button type="button" class="save">Save</button>
+            <select name="dynamic_value" class="form-control">
+                <option value="" selected></option>
+                <option value="address">address</option>
+                <option value="paragraph">paragraph</option>
+                <option value="sentence">sentence</option>
+                <option value="word">word</option>
+                <option value="animal">animal</option>
+                <option value="color">color</option>
+                <option value="datetime">datetime</option>
+                <option value="ipv4">ipv4</option>
+                <option value="id">id</option>
+                <option value="id">id</option>
+                <option value="id">id</option>
+            </select>
+        </td>
+        <td>
+            <button type="button" class="btn btn-sm btn-outline-primary save">Save</button>
         </td>
     </tr>
 </template>

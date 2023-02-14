@@ -20,36 +20,44 @@ function generateValueByType(type) {
     } else if (type === 'date') {
         inputValue = faker.date.birthdate()
     } else if (type === 'number') {
-        let opt={}
-        let maxLength = $selectedInput.attr('maxlength')
-        if(maxLength){
-            opt.length = parseInt(maxLength)
-        }
-        console.log('opt32:',opt)
-        inputValue = faker.datatype.number(opt)
+        inputValue = faker.datatype.number()
     } else if (type === 'tel') {
         inputValue = faker.phone.number('535#######')
     }
 
-    console.log(type,':',inputValue)
+    console.log(type, ':', inputValue)
     $selectedInput.val(inputValue)
 }
 
 chrome.runtime.onMessage.addListener( // this is the message listener
     function (request, sender, sendResponse) {
         console.log('request:', request);
+
+        fillTheBlanksByType()
+
         if (request.event === 'fillInTheBlanksByRule') {
             for (const [ix, rule] of Object.entries(request.definitionList)) {
                 if (rule.inputSelector && rule.inputSelectorValue) {
+                    let inputValue = '';
+                    let $inputElement;
+
                     if (rule.inputSelector === 'class') {
-                        $('form input.' + rule.inputSelectorValue).val(faker.internet.userName())
+                        $inputElement = $('form input.' + rule.inputSelectorValue + ', form textarea.' + rule.inputSelectorValue)
                     } else if (rule.inputSelector === 'id') {
-                        $('form input#' + rule.inputSelectorValue).val(faker.internet.userName())
+                        $inputElement = $('form input#' + rule.inputSelectorValue + ', form textarea#' + rule.inputSelectorValue)
                     } else if (rule.inputSelector === 'attribute') {
-                        $('form input[' + rule.inputSelectorValue + ']').val(faker.internet.userName())
+                        $inputElement = $('form input[' + rule.inputSelectorValue + ']' + ', form textarea[' + rule.inputSelectorValue + ']')
                     } else if (rule.inputSelector === 'name') {
-                        $('form input[name="' + rule.inputSelectorValue + '"]').val(faker.internet.userName())
+                        $inputElement = $('form input[name="' + rule.inputSelectorValue + '"]' + ', form textarea[name="' + rule.inputSelectorValue + '"]')
                     }
+
+                    if (rule.staticValue) {
+                        inputValue = rule.staticValue
+                    } else {
+                        inputValue = faker.internet.userName()
+                    }
+
+                    $inputElement.val(inputValue)
                 } else if (rule.inputType) {
                     generateValueByType(rule.inputType)
                 }
@@ -62,6 +70,17 @@ chrome.runtime.onMessage.addListener( // this is the message listener
     }
 );
 
+function tcknGenerator() {
+    var a = "" + Math.floor(900000001 * Math.random() + 1e8),
+        b = a.split("").map(function (t) {
+            return parseInt(t, 10)
+        }),
+        c = b[0] + b[2] + b[4] + b[6] + b[8],
+        d = b[1] + b[3] + b[5] + b[7],
+        e = (7 * c - d) % 10;
+
+    return a + ("" + e) + ("" + (d + c + e) % 10)
+}
 },{"@faker-js/faker/locale/tr":222}],2:[function(require,module,exports){
 "use strict";var a=Object.defineProperty;var x=Object.getOwnPropertyDescriptor;var E=Object.getOwnPropertyNames;var c=Object.prototype.hasOwnProperty;var d=(e,r)=>{for(var s in r)a(e,s,{get:r[s],enumerable:!0})},k=(e,r,s,t)=>{if(r&&typeof r=="object"||typeof r=="function")for(let o of E(r))!c.call(e,o)&&o!==s&&a(e,o,{get:()=>r[o],enumerable:!(t=x(r,o))||t.enumerable});return e};var l=e=>k(a({},"__esModule",{value:!0}),e);var p={};d(p,{FakerError:()=>n});module.exports=l(p);class n extends Error{}0&&(module.exports={FakerError});
 

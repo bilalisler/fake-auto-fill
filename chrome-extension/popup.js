@@ -1,26 +1,60 @@
 'use strict';
 
+function load() {
+    chrome.storage.local.get(['rules'], function (result) {
+        if (typeof result.rules !== 'undefined') {
+            for (const [index, rule] of Object.entries(result.rules)) {
+                let $newRow = $($('#new_row_template').clone(true).html())
+                for (const [key, val] of Object.entries(rule)) {
+                    if ($('input[name="' + key + '"]', $newRow).length > 0) {
+                        $('input[name="' + key + '"]', $newRow).val(val);
+                    } else if ($('select[name="' + key + '"]', $newRow).length > 0) {
+                        $('select[name="' + key + '"]', $newRow).prop("selected", false)
+
+                        $('select[name="' + key + '"] option[value="' + val + '"]', $newRow).prop("selected", true)
+                    }
+                }
+                $newRow.appendTo('#item_list')
+            }
+        }
+    })
+}
+
+load()
+
+
 $('#new_definition').on('click', function () {
     let newRow = $('#new_row_template').html()
     $('#item_list').append(newRow)
 })
 
+$('#clear_all').on('click', function () {
+    clearStorage()
+    $('#item_list tbody').html('')
+})
+
+
 $(document).on('click', '.save', async function () {
     let trElement = $(this).parent('td').parent('tr')
     let trElementIndex = $(trElement).index();
 
-    let inputClass = $(trElement).find('input[name="input_class"]').val()
-    let inputId = $(trElement).find('input[name="input_id"]').val()
-    let inputType = $(trElement).find('select[name="input_type"] option:selected').val()
-    let staticValue = $(trElement).find('input[name="static_value"]').val()
+    let rules = {}
+    rules[trElementIndex] = {}
+    trElement.find('td input, td select').each((index, element) => {
+        let name = $(element).attr('name')
+        let elementValue = $(element).val()
 
-    storage('static_value' + trElementIndex, staticValue)
-    storage('input_class' + trElementIndex, inputClass)
-    storage('input_type' + trElementIndex, inputType)
-    storage('input_id' + trElementIndex, inputId)
+        rules[trElementIndex][name] = elementValue
+    })
 
+    getStorage('rules').then((result) => {
+        if (typeof result.rules !== 'undefined') {
+            let oldRules = Object.values(result.rules)
+            rules = Object.assign({}, oldRules, rules);
+        }
 
-    // let val = await getStorage('input_class' + trElementIndex)
+        storage('rules', rules)
+    })
 })
 
 $(document).on('click', '#apply', async function () {
@@ -66,9 +100,13 @@ $(document).on('click', '#random', async function () {
 })
 
 function storage(itemKey, itemValue) {
-    chrome.storage.local.set({[itemKey]: itemValue});
+    return chrome.storage.local.set({[itemKey]: itemValue})
 }
 
 function getStorage(itemKey) {
-    return chrome.storage.local.get([itemKey]);
+    return chrome.storage.local.get([itemKey])
+}
+
+function clearStorage() {
+    return chrome.storage.local.clear();
 }
