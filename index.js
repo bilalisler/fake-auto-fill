@@ -1,4 +1,5 @@
-const {faker} = require('@faker-js/faker/locale/tr')
+const {faker} = require('@faker-js/faker')
+faker.setLocale('tr')
 
 console.log('CONTENT.JS')
 
@@ -54,10 +55,10 @@ function getRuleSelector(rule) {
 
 chrome.runtime.onMessage.addListener( // this is the message listener
     function (request, sender, sendResponse) {
-
-        fillTheBlanksByType()
+        console.log('request:', request)
 
         if (request.event === 'fillInTheBlanksByRule') {
+            fillTheBlanksByType() // fill random
             for (const [ix, rule] of Object.entries(request.definitionList)) {
 
                 if (rule.inputSelector && rule.inputSelectorValue) {
@@ -85,32 +86,28 @@ chrome.runtime.onMessage.addListener( // this is the message listener
                 }
             }
         } else if (request.event === 'fillInTheBlanksRandom') {
-            fillTheBlanksByType()
+            fillTheBlanksByType() // fill random
+        } else if (request.event === 'changeLanguage') {
+            faker.setLocale(request.lang)
         }
 
         sendResponse({status: 'ok'});
-    }
-)
+    })
 
-function fullAddress(){
+function fullAddress() {
     return faker.address.streetAddress()
 }
 
 function tcknGenerator() {
-    var a = "" + Math.floor(900000001 * Math.random() + 1e8),
-        b = a.split("").map(function (t) {
-            return parseInt(t, 10)
-        }),
-        c = b[0] + b[2] + b[4] + b[6] + b[8],
-        d = b[1] + b[3] + b[5] + b[7],
-        e = (7 * c - d) % 10;
+    var a = "" + Math.floor(900000001 * Math.random() + 1e8), b = a.split("").map(function (t) {
+        return parseInt(t, 10)
+    }), c = b[0] + b[2] + b[4] + b[6] + b[8], d = b[1] + b[3] + b[5] + b[7], e = (7 * c - d) % 10;
 
     return a + ("" + e) + ("" + (d + c + e) % 10)
 }
 
 function getPropByString(obj, propString) {
-    if (!propString)
-        return obj;
+    if (!propString) return obj;
 
     var prop, props = propString.split('.');
 

@@ -25,6 +25,14 @@ function loadRules() {
 
 loadRules()
 
+getStorage('lang').then((resp) => {
+    sendMessage({
+        event: "changeLanguage",
+        lang: resp.lang
+    })
+})
+
+
 function clearTableBody() {
     $('#item_list tbody').html('')
     $('#item_list tfoot tr.message').show()
@@ -46,6 +54,25 @@ $('#clear_rules').on('click', function (e) {
     clearStorage()
     clearTableBody()
 })
+
+$('.change_language').on('click', function (e) {
+    e.preventDefault()
+    let lang = $(this).attr('lang')
+    storage('lang', lang)
+
+    sendMessage({
+        event: "changeLanguage",
+        lang
+    })
+})
+
+function sendMessage(data) {
+    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, data, function (response) {
+                // console.log('process response:', response)
+            })
+    })
+}
 
 $(document).on('click', '.remove', async function () {
     let trElement = $(this).parent('td').parent('tr')
