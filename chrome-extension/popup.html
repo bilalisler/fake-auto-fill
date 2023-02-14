@@ -9,6 +9,8 @@
     <style>
         body {
             font-size: 11px !important;
+            min-width: 480px;
+            max-width: 680px;
         }
 
         .w100 {
@@ -56,13 +58,24 @@
             padding: 7px !important;
         }
 
+        .btn-sm {
+            padding: 3px 5px;
+            font-size: 12px;
+            line-height: 15px;
+            border-radius: 0.2rem;
+        }
+
+        .popup-title {
+            font-size: 16px;
+            font-weight: 500;
+        }
     </style>
 </head>
-<body style="min-width: 450px;">
+<body>
 
 <div class="jumbotron">
     <div class="d-flex justify-content-between">
-        <h5>Fake Fill Blanks</h5>
+        <span class="popup-title">Fake Fill Blanks</span>
         <button type="button" class="btn btn-sm btn-outline-light" data-toggle="modal" data-target="#exampleModal">
             <i class="fa fa-info"></i>
         </button>
@@ -89,12 +102,12 @@
 </div>
 
 
-<table id="item_list" class="table table-bordered">
+<table id="item_list" class="table table-bordered table-hover">
     <thead>
     <tr>
-        <th>Selector</th>
+        <th>Selector Type</th>
         <th>Selector Value</th>
-        <th>Type</th>
+        <th>Input Type</th>
         <th>Static Value</th>
         <th>Predefined Value</th>
         <th>#</th>
@@ -105,7 +118,7 @@
     <tfoot>
     <tr class="message">
         <td colspan="6">
-           <i class="fa fa-warning"></i> There is no any rule, click new rule button or apply random
+            <i class="fa fa-warning"></i> There is no any rule, click new rule button or apply random
         </td>
     </tr>
     </tfoot>
@@ -122,12 +135,46 @@
                 </button>
             </div>
             <div class="modal-body">
+                <span class="text-uppercase">
+                    <u>
+                        Tutorial:
+                    </u>
+                </span>
+                <p>
+                    <i><b>New Rule:</b></i> create new rule row <br>
+                    <i><b>Apply Rules:</b></i> apply defined rules below <br>
+                    <i><b>Apply Random:</b></i> fill inputs with fake data without define any rule <br>
+                    <i><b>Clear Rules:</b></i> clear all defined rules
+                </p>
+                <hr>
+
+                <span class="text-uppercase">
+                    <u>
+                        Examples:
+                    </u>
+                </span>
+
                 <p style="font-size: 12px">
-                    - you can define rule that use only type, static value or predefined value but can't use selector
-                    and selector
-                    value
+                    > Selector Type = <span class="badge badge-primary text-wrap">attribute</span> <br>
+                    > Selector Value = <span class="badge badge-primary text-wrap">data-name="first_name"</span> <br>
+                    > Input Type = <span class="badge badge-primary text-wrap">text</span> <br>
+                    > Static Value = <span class="badge badge-primary text-wrap">Micheal</span> <br>
                     <br>
-                    - selector and selector value and static value or predefined value <br>
+                    <b>Output Jquery:</b> <br>
+                    $('input[type="text"][data-name="first_name"]').val('Micheal')
+
+                </p>
+                <hr>
+                <p style="font-size: 12px">
+                    > Selector Type = <span class="badge badge-primary text-wrap">id</span> <br>
+                    > Selector Value = <span class="badge badge-primary text-wrap">first_name</span> <br>
+                    > Input Type = <span class="badge badge-primary text-wrap">text</span> <br>
+                    > Predefined Value = <span class="badge badge-primary text-wrap">first name</span> <br>
+                    <br>
+                    <b>Output Jquery:</b> <br>
+                    $('input[type="text"][id="first_name"]').val('Micheal') <br>
+                    <b>!!! Note:</b> element value will random first name
+
                 </p>
             </div>
         </div>
@@ -158,27 +205,29 @@
                 <option value="date">date</option>
                 <option value="number">number</option>
                 <option value="email">email</option>
+                <option value="radio">radio</option>
             </select>
         </td>
         <td><input type="text" name="static_value" class="form-control w100"></td>
         <td>
-            <select name="dynamic_value" class="form-control w100">
+            <select name="predefined_value" class="form-control w100">
                 <option value="" selected>-</option>
-<!--                <option value="address">address</option>-->
-                <option value="lorem.paragraph()">paragraph</option>
-                <option value="lorem.sentence()">sentence</option>
-                <option value="random.word()">word</option>
-                <option value="animal.cat()">animal</option>
-                <option value="internet.color()">color</option>
-                <option value="internet.userName()">username</option>
-                <option value="datatype.datetime()">datetime</option>
-                <option value="internet.ipv4()">ipv4</option>
-                <option value="name.fullName()">full name</option>
-                <option value="name.firstName()">first name</option>
-                <option value="name.lastName()">last name</option>
+                <option value="full_address">full address</option>
+                <option value="lorem.paragraph">paragraph</option>
+                <option value="lorem.sentence">sentence</option>
+                <option value="random.word">word</option>
+                <option value="animal.cat">animal</option>
+                <option value="internet.color">color</option>
+                <option value="internet.userName">username</option>
+                <option value="datatype.datetime">datetime</option>
+                <option value="internet.ipv4">ipv4</option>
+                <option value="name.fullName">full name</option>
+                <option value="name.firstName">first name</option>
+                <option value="name.lastName">last name</option>
+                <option value="turkish_identity_number">Turkish Identity Number</option>
             </select>
         </td>
-        <td>
+        <td style="width: 65px">
             <button type="button" class="btn btn-sm btn-outline-primary save">
                 <i class="fa fa-save"></i>
             </button>

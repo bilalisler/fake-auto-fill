@@ -11,55 +11,78 @@ function fillTheBlanksByType() {
     }
 }
 
-function generateValueByType(type) {
-    let $selectedInput = $('form input[type="' + type + '"]');
+function generateValueByType(inputType) {
+    try {
+        let typeSelector = getTypeSelector(inputType)
 
-    let inputValue = faker.name.fullName();
-    if (type === 'email') {
-        inputValue = faker.internet.email();
-    } else if (type === 'date') {
-        inputValue = faker.date.birthdate()
-    } else if (type === 'number') {
-        inputValue = faker.datatype.number()
-    } else if (type === 'tel') {
-        inputValue = faker.phone.number('535#######')
+        if (inputType === 'email') {
+            $('form input' + typeSelector).val(faker.internet.email())
+        } else if (inputType === 'date') {
+            $('form input' + typeSelector).val(faker.date.birthdate())
+        } else if (inputType === 'number') {
+            $('form input' + typeSelector).val(faker.datatype.number())
+        } else if (inputType === 'tel') {
+            $('form input' + typeSelector).val(faker.phone.number('535#######'))
+        } else if (inputType === 'radio') {
+            if ($('form input' + typeSelector + ':eq(0)').length) {
+                // $('form input' + typeSelector + ':eq(0)').prop('checked', true)
+            }
+        } else {
+            $('form input' + typeSelector).val(faker.name.fullName())
+        }
+    } catch (error) {
+        console.log('error:', error.message)
+    }
+}
+
+function getTypeSelector(type) {
+    return '[type="' + type + '"]'
+}
+
+function getRuleSelector(rule) {
+    if (rule.inputSelector === 'class') {
+        return '.' + rule.inputSelectorValue
+    } else if (rule.inputSelector === 'id') {
+        return '#' + rule.inputSelectorValue
+    } else if (rule.inputSelector === 'attribute') {
+        return '[' + rule.inputSelectorValue + ']'
+    } else if (rule.inputSelector === 'name') {
+        return '[name="' + rule.inputSelectorValue + '"]'
     }
 
-    console.log(type, ':', inputValue)
-    $selectedInput.val(inputValue)
+    return ''
 }
 
 chrome.runtime.onMessage.addListener( // this is the message listener
     function (request, sender, sendResponse) {
-        console.log('request:', request);
 
         fillTheBlanksByType()
 
         if (request.event === 'fillInTheBlanksByRule') {
             for (const [ix, rule] of Object.entries(request.definitionList)) {
+
                 if (rule.inputSelector && rule.inputSelectorValue) {
                     let inputValue = '';
-                    let $inputElement;
 
-                    if (rule.inputSelector === 'class') {
-                        $inputElement = $('form input.' + rule.inputSelectorValue + ', form textarea.' + rule.inputSelectorValue)
-                    } else if (rule.inputSelector === 'id') {
-                        $inputElement = $('form input#' + rule.inputSelectorValue + ', form textarea#' + rule.inputSelectorValue)
-                    } else if (rule.inputSelector === 'attribute') {
-                        $inputElement = $('form input[' + rule.inputSelectorValue + ']' + ', form textarea[' + rule.inputSelectorValue + ']')
-                    } else if (rule.inputSelector === 'name') {
-                        $inputElement = $('form input[name="' + rule.inputSelectorValue + '"]' + ', form textarea[name="' + rule.inputSelectorValue + '"]')
-                    }
+                    let ruleTypeSelector = getTypeSelector(rule.inputType)
+                    let ruleSelector = getRuleSelector(rule)
+                    let $inputElement = $('form input' + ruleSelector + ruleTypeSelector + ', form textarea' + ruleSelector + ruleTypeSelector)
 
-                    if (rule.staticValue) {
+                    if (rule.staticValue.length > 0) {
                         inputValue = rule.staticValue
-                    } else if (rule.dynamicValue) {
-                        inputValue = getPropByString(faker,rule.dynamicValue)
+                    } else if (rule.predefinedValue.length > 0) {
+                        if (rule.predefinedValue === 'turkish_identity_number') {
+                            inputValue = tcknGenerator()
+                        } else if (rule.predefinedValue === 'full_address') {
+                            inputValue = fullAddress()
+                        } else {
+                            inputValue = getPropByString(faker, rule.predefinedValue.replace('()', ''))()
+                        }
                     }
 
                     $inputElement.val(inputValue)
                 } else if (rule.inputType) {
-                    generateValueByType(rule.inputType)
+                    generateValueByType(rule)
                 }
             }
         } else if (request.event === 'fillInTheBlanksRandom') {
@@ -69,6 +92,10 @@ chrome.runtime.onMessage.addListener( // this is the message listener
         sendResponse({status: 'ok'});
     }
 )
+
+function fullAddress(){
+    return faker.address.streetAddress()
+}
 
 function tcknGenerator() {
     var a = "" + Math.floor(900000001 * Math.random() + 1e8),

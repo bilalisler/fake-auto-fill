@@ -101,14 +101,14 @@ $(document).on('click', '#apply_rules', async function (e) {
         let inputSelectorValue = $(trElement).find('input[name="input_selector_value"]').val()
         let inputType = $(trElement).find('select[name="input_type"] option:selected').val()
         let staticValue = $(trElement).find('input[name="static_value"]').val()
-        let dynamicValue = $(trElement).find('input[name="dynamic_value"]').val()
+        let predefinedValue = $(trElement).find('select[name="predefined_value"] option:selected').val()
 
         definitionList.push({
             inputSelector,
             inputSelectorValue,
             inputType,
             staticValue,
-            dynamicValue
+            predefinedValue
         })
     })
 
