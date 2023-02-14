@@ -3,74 +3,155 @@
 <head>
     <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1254">
     <META HTTP-EQUIV="Content-language" CONTENT="tr">
-    <title></title>
+
     <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <style>
+        body {
+            font-size: 11px !important;
+        }
+
+        .w100 {
+            width: 60px !important;
+        }
+
+        ul.menu {
+            list-style-type: none;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin: 0;
+            padding: 0;
+        }
+
+        ul.menu li a {
+            color: #fff
+        }
+
+        .jumbotron {
+            margin-bottom: 0;
+            padding: 15px 25px 10px 25px;
+            border-radius: 0 !important;
+            background-color: #2dc44d;
+            color: #fff;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            height: auto;
+            padding: 3px 3px;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+
+        .table td, .table th {
+            padding: 7px !important;
+        }
+
+    </style>
 </head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">
-        <img src="./images/fill_blanks_32.png" width="30" height="30" class="d-inline-block align-top" alt="">
-        Fill Blanks
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<body style="min-width: 450px;">
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#" id="new_definition">New Rule</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" id="apply">Apply</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" id="random">Random</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" id="clear_all">Clear</a>
-            </li>
-        </ul>
+<div class="jumbotron">
+    <div class="d-flex justify-content-between">
+        <h5>Fake Fill Blanks</h5>
+        <button type="button" class="btn btn-sm btn-outline-light" data-toggle="modal" data-target="#exampleModal">
+            <i class="fa fa-info"></i>
+        </button>
     </div>
-</nav>
+    <div class="d-flex justify-content-end">
+        more info
+    </div>
+    <hr class="my-2">
 
-<div class="container-fluid">
-    <div class="row"></div>
-    <div class="row" id="item_list"></div>
+    <ul class="menu">
+        <li>
+            <a href="#" id="new_rule">New Rule</a>
+        </li>
+        <li>
+            <a href="#" id="apply_rules">Apply Rules</a>
+        </li>
+        <li>
+            <a href="#" id="apply_random">Apply Random</a>
+        </li>
+        <li>
+            <a href="#" id="clear_rules">Clear Rules</a>
+        </li>
+    </ul>
 </div>
-<!--<table id="item_list" class="table table-hover">-->
-<!--    <thead>-->
-<!--    <tr>-->
-<!--        <th>Selector</th>-->
-<!--        <th>Selector Value</th>-->
-<!--        <th>Type</th>-->
-<!--        <th>Static Value</th>-->
-<!--        <th>Predefined Value</th>-->
-<!--        <th>#</th>-->
-<!--    </tr>-->
-<!--    </thead>-->
-<!--    <tbody>-->
-<!--    </tbody>-->
-<!--</table>-->
+
+
+<table id="item_list" class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Selector</th>
+        <th>Selector Value</th>
+        <th>Type</th>
+        <th>Static Value</th>
+        <th>Predefined Value</th>
+        <th>#</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+    <tfoot>
+    <tr class="message">
+        <td colspan="6">
+           <i class="fa fa-warning"></i> There is no any rule, click new rule button or apply random
+        </td>
+    </tr>
+    </tfoot>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tips</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 12px">
+                    - you can define rule that use only type, static value or predefined value but can't use selector
+                    and selector
+                    value
+                    <br>
+                    - selector and selector value and static value or predefined value <br>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="jquery-3.6.3.min.js"></script>
 <script src="bootstrap.min.js"></script>
 <script src="popup.js"></script>
 <template id="new_row_template">
     <tr>
         <td>
-            <select name="input_selector" class="form-control">
-                <option value="" selected></option>
+            <select name="input_selector" class="form-control w100">
+                <option value="" selected>-</option>
                 <option value="class">class</option>
                 <option value="attribute">attribute</option>
                 <option value="name">name</option>
                 <option value="id">id</option>
             </select>
         </td>
-        <td><input type="text" name="input_selector_value" class="form-control"></td>
+        <td><input type="text" name="input_selector_value" class="form-control w100"></td>
         <td>
-            <select name="input_type" class="form-control">
-                <option value="" selected></option>
+            <select name="input_type" class="form-control w100">
+                <option value="" selected>-</option>
                 <option value="text">text</option>
                 <option value="tel">tel</option>
                 <option value="email">email</option>
@@ -79,10 +160,10 @@
                 <option value="email">email</option>
             </select>
         </td>
-        <td><input type="text" name="static_value" class="form-control"></td>
+        <td><input type="text" name="static_value" class="form-control w100"></td>
         <td>
-            <select name="dynamic_value" class="form-control">
-                <option value="" selected></option>
+            <select name="dynamic_value" class="form-control w100">
+                <option value="" selected>-</option>
                 <option value="address">address</option>
                 <option value="paragraph">paragraph</option>
                 <option value="sentence">sentence</option>
@@ -97,7 +178,9 @@
             </select>
         </td>
         <td>
-            <button type="button" class="btn btn-sm btn-outline-primary save">Save</button>
+            <button type="button" class="btn btn-sm btn-outline-primary save">
+                <i class="fa fa-save"></i>
+            </button>
         </td>
     </tr>
 </template>

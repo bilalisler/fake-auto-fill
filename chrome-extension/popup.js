@@ -3,6 +3,7 @@
 function load() {
     chrome.storage.local.get(['rules'], function (result) {
         if (typeof result.rules !== 'undefined') {
+            $('#item_list tfoot tr.message').hide()
             for (const [index, rule] of Object.entries(result.rules)) {
                 let $newRow = $($('#new_row_template').clone(true).html())
                 for (const [key, val] of Object.entries(rule)) {
@@ -10,10 +11,11 @@ function load() {
                         $('input[name="' + key + '"]', $newRow).val(val);
                     } else if ($('select[name="' + key + '"]', $newRow).length > 0) {
                         $('select[name="' + key + '"]', $newRow).prop("selected", false)
-
                         $('select[name="' + key + '"] option[value="' + val + '"]', $newRow).prop("selected", true)
                     }
                 }
+
+                $newRow.find('button.save').prop('disabled', true)
                 $newRow.appendTo('#item_list')
             }
         }
@@ -23,14 +25,18 @@ function load() {
 load()
 
 
-$('#new_definition').on('click', function () {
+$('#new_rule').on('click', function (e) {
+    e.preventDefault()
+    $('#item_list tfoot tr.message').hide()
     let newRow = $('#new_row_template').html()
-    $('#item_list').append(newRow)
+    $('#item_list tbody').append(newRow)
 })
 
-$('#clear_all').on('click', function () {
+$('#clear_rules').on('click', function (e) {
+    e.preventDefault()
     clearStorage()
     $('#item_list tbody').html('')
+    $('#item_list tfoot tr.message').show()
 })
 
 
@@ -55,10 +61,12 @@ $(document).on('click', '.save', async function () {
 
         storage('rules', rules)
     })
+
+    $(this).prop('disabled', true);
 })
 
-$(document).on('click', '#apply', async function () {
-
+$(document).on('click', '#apply_rules', async function (e) {
+    e.preventDefault()
     let definitionList = [];
 
     $('table#item_list tbody tr').each((trIndex, trElement) => {
@@ -88,7 +96,8 @@ $(document).on('click', '#apply', async function () {
     })
 })
 
-$(document).on('click', '#random', async function () {
+$(document).on('click', '#apply_random', async function (e) {
+    e.preventDefault()
     chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id,
             {
