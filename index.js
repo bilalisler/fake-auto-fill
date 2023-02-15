@@ -36,7 +36,11 @@ function generateValueByType(inputType) {
 }
 
 function getTypeSelector(type) {
-    return '[type="' + type + '"]'
+    if (type.length > 0) {
+        return '[type="' + type + '"]'
+    }
+
+    return ''
 }
 
 function getRuleSelector(rule) {
@@ -95,7 +99,11 @@ chrome.runtime.onMessage.addListener( // this is the message listener
     })
 
 function fullAddress() {
-    return faker.address.streetAddress()
+    return faker.address.streetAddress() + ' ' +
+        faker.address.secondaryAddress() + ' ' +
+        'No:' + faker.address.buildingNumber() + ' ' +
+        faker.address.cityName() + '/' +
+        faker.address.country()
 }
 
 function tcknGenerator() {
